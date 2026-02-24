@@ -28,10 +28,22 @@
 
 ## 🚀 安裝指南
 
-### 選項 A：腳本一鍵安裝 (推薦)
-我們提供跨平台的命令列安裝腳本 (`install.sh`)，執行時自動同步最新版本的目錄至您的使用者設定環境中。
+### 選項 A：一鍵安裝 (推薦)
+這是最快的安裝方式。只需在終端機執行以下指令，即可下載 GitHub 上最新發布的 `.skill` 檔案並交由 Gemini CLI 安裝。
+（*安裝前請確認已安裝 `curl` 與 `gemini` 指令*）
 
 ```bash
+curl -sL https://github.com/slee124565/daily-log-coach/releases/latest/download/daily-log-coach.skill -o /tmp/daily-log-coach.skill && gemini skills install /tmp/daily-log-coach.skill --scope user
+```
+> **提示**：我們目前提供自動打包功能，您也可以在 [Releases](https://github.com/slee124565/daily-log-coach/releases) 頁面下載特定版本的 `.skill` 檔，並使用 `gemini skills install <檔案路徑> --scope user` 安裝。
+
+### 選項 B：開發者安裝 (適用於想修改 Prompt 的進階用戶)
+如果你想要自訂教練邏輯或分類系統，可以將專案 Clone 下來，並使用內建的腳本安裝。
+
+```bash
+git clone https://github.com/slee124565/daily-log-coach.git
+cd daily-log-coach
+
 # 預設安裝至 Gemini CLI
 ./install.sh
 
@@ -43,17 +55,6 @@
 **安裝後操作：**
 *   **Gemini CLI**：執行 `/skills reload` 重新載入。
 *   **Claude Code**：執行 `/clear` 或重新啟動程式以載入新指令。
-
-### 選項 B：標準封裝 (Gemini CLI)
-利用專案提供的 `release.sh` 腳本，透過官方工具自動封裝為標準 `.skill` 檔案。
-
-```bash
-# 1. 打包 skill 目錄的內容
-./release.sh
-
-# 2. 安裝封裝檔 (預期產生 daily-log-coach.skill)
-gemini skills install ./daily-log-coach.skill --scope user
-```
 
 ---
 

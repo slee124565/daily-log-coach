@@ -1,0 +1,65 @@
+name: Release Skill
+
+on:
+  push:
+    tags:
+      - 'v*' # 當推送以 v 開頭的標籤時觸發 (例如 v0.0.5)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 需要寫入權限來建立 Release
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Gemini CLI (for skill-creator)
+        run: npm install -g @google/gemini-cli
+
+      - name: Package Skill
+        run: |
+          echo "Packaging skill..."
+          NPM_GLOBAL=$(npm root -g)
+          PACKAGE_SCRIPT="$NPM_GLOBAL/@google/gemini-cli/node_modules/@google/gemini-cli-core/dist/src/skills/builtin/skill-creator/scripts/package_skill.cjs"
+          
+          node "$PACKAGE_SCRIPT" ./skill ./
+          
+          # 取得標籤名稱 (例如 v0.0.5)
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          OUTPUT_NAME="daily-log-coach-${TAG_NAME}.skill"
+          STABLE_NAME="daily-log-coach.skill"
+          
+          # 找出產生的原始檔案並更名為版本檔名
+          if [ -f "daily-log-coach.skill" ]; then
+            mv daily-log-coach.skill "$OUTPUT_NAME"
+          elif [ -f "skill.skill" ]; then
+            mv skill.skill "$OUTPUT_NAME"
+          else
+            echo "❌ 找不到封裝後的 .skill 檔案"
+            ls -l
+            exit 1
+          fi
+          
+          # 複製一份固定名稱的檔案供 curl 一鍵下載
+          cp "$OUTPUT_NAME" "$STABLE_NAME"
+          
+          # 將兩個檔案透過換行符設定到 GITHUB_ENV 供下個 step 讀取
+          echo "ASSET_FILES<<EOF" >> $GITHUB_ENV
+          echo "$OUTPUT_NAME" >> $GITHUB_ENV
+          echo "$STABLE_NAME" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
+          echo "✅ 成功封裝並準備上傳：$OUTPUT_NAME 與 $STABLE_NAME"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ASSET_FILES }}
+          generate_release_notes: true
