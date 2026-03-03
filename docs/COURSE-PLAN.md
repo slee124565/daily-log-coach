@@ -18,7 +18,7 @@
 | 階段 | 主題 | 形式 | 時長 |
 |------|------|------|------|
 | Stage 1 | 為什麼要學這個 | 講解討論 | 30 分鐘 |
-| Stage 2 | 安裝 Claude Code | 實機操作 | 45 分鐘 |
+| Stage 2 | 安裝 Gemini CLI | 實機操作 | 45 分鐘 |
 | Stage 3 | 安裝第一個 Skill | 實機操作 | 45 分鐘 |
 | Stage 4a | 日常使用練習 | 實機 + 討論 | 60 分鐘 |
 | Stage 4b | 個人化調適與回顧 | 討論 | 30 分鐘 |
@@ -53,32 +53,49 @@
 
 ---
 
-## Stage 2：安裝 Claude Code（45 分鐘）
+## Stage 2：安裝 Gemini CLI（45 分鐘）
 
-**前置條件**：已有 Anthropic 帳號 / 已申請 API Key
+**前置條件**：公司指派的 Google AI Studio 帳號（由管理員提供）
 
-**目標**：學員能獨立在自己的電腦上啟動 Claude Code
+**目標**：學員能獨立在自己的電腦上啟動 Gemini CLI
+
+> 詳細圖文說明請參閱：`docs/INSTALL.md`
 
 **操作步驟**（逐步帶著做）：
 
-1. 確認環境（5 分鐘）
-   - 確認有 Terminal / 命令提示字元
-   - 確認網路正常
-
-2. 安裝 Claude Code（15 分鐘）
+1. 確認並安裝 Homebrew（5 分鐘）
    ```bash
-   npm install -g @anthropic-ai/claude-code
+   brew --version
+   ```
+   - 看到版本號 → 跳過安裝；看到 `command not found` → 執行安裝指令
+   - 常見問題：安裝過程需輸入電腦密碼（畫面不顯示字元，屬正常）
+
+2. 確認並安裝 Node.js（5 分鐘）
+   ```bash
+   node --version
+   ```
+   - 需要 v18 以上；若未安裝，執行 `brew install node`
+
+3. 安裝 Gemini CLI（10 分鐘）
+   ```bash
+   npm install -g @google/gemini-cli@preview
    ```
    - 逐一處理每個人的安裝問題
-   - 常見問題備案：Node.js 未安裝、權限不足
+   - 常見問題備案：權限不足時在指令前加 `sudo`
 
-3. 第一次啟動與驗證（15 分鐘）
-   - 設定 API Key
-   - 在專案目錄下輸入 `claude`
-   - 確認 Claude Code 能正常回應
+4. 取得並設定 API Key（15 分鐘）
+   - 使用公司帳號登入 Google AI Studio 取得 API Key
+   - 將以下這行加到 `~/.zshrc` 末尾：
+     ```
+     export GEMINI_API_KEY="你的API金鑰"
+     ```
+   - 執行 `source ~/.zshrc` 讓設定生效
+   - 執行 `echo $GEMINI_API_KEY` 確認設定成功
 
-4. 自由練習：問 Claude 三個你真實想問的問題（10 分鐘）
-   - 沒有標準答案，讓學員感受基本對話
+5. 第一次啟動與自由練習（10 分鐘）
+   - 輸入 `gemini` 啟動
+   - 說：「你好，請用繁體中文自我介紹」確認正常運作
+   - 讓學員自由對話 2-3 句，感受基本互動
 
 **學員離開時的感受**：「我裝好了，而且我能用它說話。」
 
@@ -102,13 +119,15 @@
    - 從指定位置下載（或由講師直接傳送壓縮檔）
 
 3. **安裝 Skill 到正確位置**（15 分鐘）
+   ```bash
+   mkdir -p ~/.gemini/skills
+   cp -r /path/to/auto-journal ~/.gemini/skills/
    ```
-   將 Skill 資料夾放到：.claude/skills/ 目錄下
-   ```
-   - 帶著每個人確認目錄結構正確
+   - 帶著每個人確認目錄結構正確（管理員提供正確來源路徑）
 
 4. **觸發測試**（15 分鐘）
-   - 啟動 Claude Code
+   - 啟動 Gemini CLI：輸入 `gemini`
+   - 輸入 `/skills list` 確認 Skill 已載入
    - 說：「我今天完成了 XXX」
    - 確認 Skill 自動觸發並寫入日誌
 

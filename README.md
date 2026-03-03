@@ -1,8 +1,11 @@
 # Daily Log Coach Skill
 
-`daily-log-coach` 是一個專為 Gemini CLI / Claude Code 設計的「純 Prompt Skill」。它不僅是你的工作日誌記錄器，更是一位專業成長教練。
+`daily-log-coach` 是一個專為 **Gemini CLI** 設計的「純 Prompt Skill」。它不僅是你的工作日誌記錄器，更是一位專業成長教練。
 
 透過攔截你日常的隨機想法、進度更新與目標設定，它能幫你結構化地歸檔記錄，並在你累積足夠的行為軌跡後，主動提供「教練式回饋」，幫助你發現盲點並推進目標。
+
+> **適用對象**：使用公司提供的 Gemini CLI 環境的同仁。
+> **Claude Code 支援**：規劃於 Phase 2 提供，待公司導入 Claude Code 後釋出。
 
 ## 🌟 核心功能
 
@@ -44,17 +47,14 @@ curl -sL https://github.com/slee124565/daily-log-coach/releases/latest/download/
 git clone https://github.com/slee124565/daily-log-coach.git
 cd daily-log-coach
 
-# 預設安裝至 Gemini CLI
-./install.sh
-
-# 或是明確指定目標環境
+# 安裝至 Gemini CLI
 ./install.sh gemini
-./install.sh claude
 ```
 
 **安裝後操作：**
 *   **Gemini CLI**：執行 `/skills reload` 重新載入。
-*   **Claude Code**：執行 `/clear` 或重新啟動程式以載入新指令。
+
+> **注意**：Claude Code 安裝選項（`./install.sh claude`）規劃於 Phase 2 提供。
 
 ---
 
