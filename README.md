@@ -31,26 +31,10 @@
 
 ## 🚀 安裝指南
 
-### 選項 A：從 Releases 安裝（zip）
-到 [Releases](https://github.com/slee124565/daily-log-coach/releases) 下載對應檔案：
-- Gemini：`daily-log-coach-gemini-vX.Y.Z.zip`
-- Claude：`daily-log-coach-claude-vX.Y.Z.zip`
-- Codex：`daily-log-coach-codex-vX.Y.Z.zip`
+如果你還沒安裝 Gemini CLI，請先參考：
+- [Gemini CLI 安裝手冊（MacOS）](./docs/INSTALL.md)
 
-下載後解壓縮到對應目錄（user scope）：
-
-```bash
-# Gemini
-unzip daily-log-coach-gemini-vX.Y.Z.zip -d ~/.gemini/skills/daily-log-coach
-
-# Claude
-unzip daily-log-coach-claude-vX.Y.Z.zip -d ~/.claude/skills/daily-log-coach
-
-# Codex
-unzip daily-log-coach-codex-vX.Y.Z.zip -d ~/.codex/skills/daily-log-coach
-```
-
-### 選項 B：對話式安裝（提供 GitHub URL 給 Agent）
+### 選項 A：對話式安裝（提供 GitHub URL 給 Agent）
 如果你不熟悉 terminal 指令，可以直接把 GitHub URL 丟給 Agent，請它代為安裝到目前 workspace（local scope）。
 
 GitHub URL：
@@ -98,6 +82,25 @@ https://github.com/slee124565/daily-log-coach.git
 *   **Gemini CLI**：執行 `/skills reload`。
 *   **Claude Code**：執行 `/clear` 或重啟 Claude Code。
 *   **Codex**：重啟 Codex session。
+
+### 選項 B：從 Releases 安裝（zip）
+到 [Releases](https://github.com/slee124565/daily-log-coach/releases) 下載對應檔案：
+- Gemini：`daily-log-coach-gemini-vX.Y.Z.zip`
+- Claude：`daily-log-coach-claude-vX.Y.Z.zip`
+- Codex：`daily-log-coach-codex-vX.Y.Z.zip`
+
+下載後解壓縮到對應目錄（user scope）：
+
+```bash
+# Gemini
+unzip daily-log-coach-gemini-vX.Y.Z.zip -d ~/.gemini/skills/daily-log-coach
+
+# Claude
+unzip daily-log-coach-claude-vX.Y.Z.zip -d ~/.claude/skills/daily-log-coach
+
+# Codex
+unzip daily-log-coach-codex-vX.Y.Z.zip -d ~/.codex/skills/daily-log-coach
+```
 
 ### 選項 C：開發者安裝 (Gemini / Claude / Codex)
 如果你想要自訂教練邏輯或分類系統，可以將專案 Clone 下來，並使用內建的腳本安裝。
