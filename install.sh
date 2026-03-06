@@ -1,33 +1,51 @@
 #!/bin/bash
 
-# Auto-Journal Skill Installation Script
-# Usage: ./install.sh [target]
-# Example: ./install.sh gemini (Defaults to gemini)
+# Daily Log Coach Skill Installation Script
+# Usage: ./install.sh [target] [scope]
+# Example: ./install.sh gemini local (Defaults: gemini local)
 
 # Set variables
 TARGET=${1:-gemini}  # Default to gemini
+SCOPE=${2:-local}    # Default to local workspace
 SKILL_NAME="daily-log-coach"
-SOURCE_DIR="./skill"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="$SCRIPT_DIR/skill/$TARGET"
+
+# Determine target base directory by model
+if [ "$TARGET" == "gemini" ]; then
+    TARGET_BASE=".gemini"
+elif [ "$TARGET" == "claude" ]; then
+    TARGET_BASE=".claude"
+elif [ "$TARGET" == "codex" ]; then
+    TARGET_BASE=".codex"
+else
+    echo "❌ Error: Unsupported target environment '$TARGET'"
+    echo "Usage: ./install.sh [gemini|claude|codex] [local|user]"
+    exit 1
+fi
+
+if [ "$SCOPE" == "local" ]; then
+    WORKSPACE_ROOT="${LOCAL_AGENT_WORKSPACE:-$PWD}"
+    DEST_DIR="$WORKSPACE_ROOT/$TARGET_BASE/skills/$SKILL_NAME"
+elif [ "$SCOPE" == "user" ]; then
+    DEST_DIR="$HOME/$TARGET_BASE/skills/$SKILL_NAME"
+else
+    echo "❌ Error: Unsupported scope '$SCOPE'"
+    echo "Usage: ./install.sh [gemini|claude|codex] [local|user]"
+    exit 1
+fi
 
 # Check if source directory exists
 if [ ! -d "$SOURCE_DIR" ]; then
     echo "❌ Error: Source directory $SOURCE_DIR not found"
+    echo "Please make sure model-specific skill files exist (skill/gemini or skill/claude or skill/codex)."
     exit 1
 fi
 
-# Determine target installation path (User Scope)
-if [ "$TARGET" == "gemini" ]; then
-    DEST_DIR="$HOME/.gemini/skills/$SKILL_NAME"
-elif [ "$TARGET" == "claude" ]; then
-    DEST_DIR="$HOME/.claude/skills/$SKILL_NAME"
-else
-    echo "❌ Error: Unsupported target environment '$TARGET'"
-    echo "Usage: ./install.sh [gemini|claude]"
-    exit 1
-fi
-
-echo "🚀 Preparing to install Auto-Journal Skill to $TARGET environment..."
+echo "🚀 Preparing to install Daily Log Coach Skill to $TARGET environment..."
+echo "🧭 Install scope: $SCOPE"
 echo "📂 Target path: $DEST_DIR"
+echo "📦 Source path: $SOURCE_DIR"
 
 # Create target directory if it doesn't exist
 mkdir -p "$DEST_DIR"
@@ -48,8 +66,10 @@ if [ $? -eq 0 ]; then
     echo "Please execute the reload command in your $TARGET terminal to enable the Skill:"
     if [ "$TARGET" == "gemini" ]; then
         echo "👉 /skills reload"
-    else
+    elif [ "$TARGET" == "claude" ]; then
         echo "👉 /clear (or restart Claude Code)"
+    else
+        echo "👉 restart Codex session to reload skills"
     fi
     echo "--------------------------------------------------------"
 else

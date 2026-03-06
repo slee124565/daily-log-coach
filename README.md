@@ -1,11 +1,11 @@
 # Daily Log Coach Skill
 
-`daily-log-coach` 是一個專為 **Gemini CLI** 設計的「純 Prompt Skill」。它不僅是你的工作日誌記錄器，更是一位專業成長教練。
+`daily-log-coach` 是一個可同時支援 **Gemini CLI**、**Claude Code** 與 **Codex** 的「純 Prompt Skill」。它不僅是你的工作日誌記錄器，更是一位專業成長教練。
 
 透過攔截你日常的隨機想法、進度更新與目標設定，它能幫你結構化地歸檔記錄，並在你累積足夠的行為軌跡後，主動提供「教練式回饋」，幫助你發現盲點並推進目標。
 
-> **適用對象**：使用公司提供的 Gemini CLI 環境的同仁。
-> **Claude Code 支援**：規劃於 Phase 2 提供，待公司導入 Claude Code 後釋出。
+> **適用對象**：使用 Gemini CLI、Claude Code 或 Codex 的同仁。
+> **目前狀態**：Gemini 版本為主要發佈版本；Claude / Codex 版本已加入 repo 結構支援，可按各平台規格持續優化。
 
 ## 🌟 核心功能
 
@@ -31,8 +31,8 @@
 
 ## 🚀 安裝指南
 
-### 選項 A：一鍵安裝 (推薦)
-這是最快的安裝方式。只需在終端機執行以下指令，即可下載 GitHub 上最新發布的 `.skill` 檔案並交由 Gemini CLI 安裝。
+### 選項 A：一鍵安裝 (Gemini)
+這是最快的 Gemini 安裝方式。只需在終端機執行以下指令，即可下載 GitHub 上最新發布的 `.skill` 檔案並交由 Gemini CLI 安裝。
 （*安裝前請確認已安裝 `curl` 與 `gemini` 指令*）
 
 ```bash
@@ -40,21 +40,46 @@ curl -sL https://github.com/slee124565/daily-log-coach/releases/latest/download/
 ```
 > **提示**：我們目前提供自動打包功能，您也可以在 [Releases](https://github.com/slee124565/daily-log-coach/releases) 頁面下載特定版本的 `.skill` 檔，並使用 `gemini skills install <檔案路徑> --scope user` 安裝。
 
-### 選項 B：開發者安裝 (適用於想修改 Prompt 的進階用戶)
+### 選項 B：開發者安裝 (Gemini / Claude / Codex)
 如果你想要自訂教練邏輯或分類系統，可以將專案 Clone 下來，並使用內建的腳本安裝。
 
 ```bash
 git clone https://github.com/slee124565/daily-log-coach.git
 cd daily-log-coach
 
-# 安裝至 Gemini CLI
+# 安裝到「目前工作目錄」的本地 agent workspace（預設 local scope）
 ./install.sh gemini
+./install.sh claude
+./install.sh codex
+
+# 若要安裝到使用者目錄（user scope）
+./install.sh gemini user
+./install.sh claude user
+./install.sh codex user
 ```
 
 **安裝後操作：**
 *   **Gemini CLI**：執行 `/skills reload` 重新載入。
+*   **Claude Code**：執行 `/clear` 或重啟 Claude Code 重新載入。
+*   **Codex**：重啟 Codex session 重新載入。
 
-> **注意**：Claude Code 安裝選項（`./install.sh claude`）規劃於 Phase 2 提供。
+> `install.sh` 參數格式：`./install.sh [gemini|claude|codex] [local|user]`（預設為 `local`）。
+
+### 模型版本結構
+
+```text
+skill/
+  gemini/
+    SKILL.md
+    references/
+  claude/
+    SKILL.md
+    references/
+  codex/
+    SKILL.md
+```
+
+可使用 `./release.sh gemini`、`./release.sh claude` 或 `./release.sh codex` 產生對應發佈檔。
 
 ---
 

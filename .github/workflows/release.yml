@@ -23,22 +23,24 @@ jobs:
       - name: Install Gemini CLI (for skill-creator)
         run: npm install -g @google/gemini-cli
 
-      - name: Package Skill
+      - name: Package Gemini Skill
         run: |
-          echo "Packaging skill..."
+          echo "Packaging Gemini skill..."
           NPM_GLOBAL=$(npm root -g)
           PACKAGE_SCRIPT="$NPM_GLOBAL/@google/gemini-cli/node_modules/@google/gemini-cli-core/dist/src/skills/builtin/skill-creator/scripts/package_skill.cjs"
           
-          node "$PACKAGE_SCRIPT" ./skill ./
+          node "$PACKAGE_SCRIPT" ./skill/gemini ./
           
           # 取得標籤名稱 (例如 v0.0.5)
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          OUTPUT_NAME="daily-log-coach-${TAG_NAME}.skill"
+          OUTPUT_NAME="daily-log-coach-gemini-${TAG_NAME}.skill"
           STABLE_NAME="daily-log-coach.skill"
           
           # 找出產生的原始檔案並更名為版本檔名
           if [ -f "daily-log-coach.skill" ]; then
             mv daily-log-coach.skill "$OUTPUT_NAME"
+          elif [ -f "gemini.skill" ]; then
+            mv gemini.skill "$OUTPUT_NAME"
           elif [ -f "skill.skill" ]; then
             mv skill.skill "$OUTPUT_NAME"
           else
@@ -47,16 +49,46 @@ jobs:
             exit 1
           fi
           
-          # 複製一份固定名稱的檔案供 curl 一鍵下載
+          # 保留固定名稱給既有 Gemini 一鍵安裝流程
           cp "$OUTPUT_NAME" "$STABLE_NAME"
           
-          # 將兩個檔案透過換行符設定到 GITHUB_ENV 供下個 step 讀取
+          echo "✅ 成功封裝 Gemini：$OUTPUT_NAME 與 $STABLE_NAME"
+
+      - name: Package Claude Skill (zip)
+        run: |
+          echo "Packaging Claude skill..."
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          CLAUDE_OUTPUT="daily-log-coach-claude-${TAG_NAME}.zip"
+          cd ./skill/claude
+          zip -r "../../$CLAUDE_OUTPUT" ./* > /dev/null
+          cd - > /dev/null
+          echo "✅ 成功封裝 Claude：$CLAUDE_OUTPUT"
+
+      - name: Package Codex Skill (zip)
+        run: |
+          echo "Packaging Codex skill..."
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          CODEX_OUTPUT="daily-log-coach-codex-${TAG_NAME}.zip"
+          cd ./skill/codex
+          zip -r "../../$CODEX_OUTPUT" ./* > /dev/null
+          cd - > /dev/null
+          echo "✅ 成功封裝 Codex：$CODEX_OUTPUT"
+
+      - name: Prepare Assets List
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          GEMINI_OUTPUT="daily-log-coach-gemini-${TAG_NAME}.skill"
+          GEMINI_STABLE="daily-log-coach.skill"
+          CLAUDE_OUTPUT="daily-log-coach-claude-${TAG_NAME}.zip"
+          CODEX_OUTPUT="daily-log-coach-codex-${TAG_NAME}.zip"
+
           echo "ASSET_FILES<<EOF" >> $GITHUB_ENV
-          echo "$OUTPUT_NAME" >> $GITHUB_ENV
-          echo "$STABLE_NAME" >> $GITHUB_ENV
+          echo "$GEMINI_OUTPUT" >> $GITHUB_ENV
+          echo "$GEMINI_STABLE" >> $GITHUB_ENV
+          echo "$CLAUDE_OUTPUT" >> $GITHUB_ENV
+          echo "$CODEX_OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          
-          echo "✅ 成功封裝並準備上傳：$OUTPUT_NAME 與 $STABLE_NAME"
+          echo "✅ 已整理 release assets 清單"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
