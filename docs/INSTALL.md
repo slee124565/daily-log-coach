@@ -83,7 +83,7 @@ Gemini CLI 需要 Node.js 才能運行。
 node --version
 ```
 
-- 如果看到 `v18.x.x` 以上的版本號碼 → **已安裝，跳到步驟 3**
+- 如果看到 `v20.x.x` 以上的版本號碼 → **已安裝，跳到步驟 3**
 - 如果看到 `command not found` → 繼續以下步驟
 
 **安裝 Node.js**：
@@ -102,7 +102,7 @@ node --version
 
 <img src="node-version.png" alt="alt text" width="600" />
 
-看到 `v18.x.x` 以上的版本號即代表成功。
+看到 `v20.x.x` 以上的版本號即代表成功。
 
 ---
 
@@ -111,7 +111,7 @@ node --version
 **執行安裝指令**：
 
 ```bash
-npm install -g @google/gemini-cli@preview
+npm install -g @google/gemini-cli
 ```
 
 安裝過程需要 1-2 分鐘。
@@ -215,13 +215,13 @@ mkdir -p ~/.gemini/skills
 
 將 Skill 資料夾複製到 `~/.gemini/skills/` 目錄下。
 
-例如，安裝 `auto-journal` Skill：
+例如，安裝 `daily-log-coach` Skill：
 
 ```bash
-cp -r /path/to/auto-journal ~/.gemini/skills/
+cp -r /path/to/daily-log-coach ~/.gemini/skills/
 ```
 
-> 管理員會提供正確的 Skill 來源路徑，替換上方指令中的 `/path/to/auto-journal`。
+> 管理員會提供正確的 Skill 來源路徑，替換上方指令中的 `/path/to/daily-log-coach`。
 
 **確認 Skill 已載入**：
 
@@ -237,7 +237,7 @@ gemini
 /skills list
 ```
 
-看到 `auto-journal` 出現在列表中，即代表安裝成功。
+看到 `daily-log-coach` 出現在列表中，即代表安裝成功。
 
 **測試 Skill**：
 
@@ -253,13 +253,12 @@ gemini
 
 **Q：步驟 3 安裝時出現 `permission denied` 錯誤**
 
-在指令前加上 `sudo`：
+請勿使用 `sudo npm install -g ...`。建議先確認你是使用 Homebrew 安裝的 Node.js，然後重開 Terminal 再執行：
 
 ```bash
-sudo npm install -g @google/gemini-cli@preview
+brew reinstall node
+npm install -g @google/gemini-cli
 ```
-
-輸入電腦密碼後按 Enter。
 
 ---
 
@@ -268,7 +267,7 @@ sudo npm install -g @google/gemini-cli@preview
 重新啟動 Terminal 後再試一次。如果仍然失敗，執行：
 
 ```bash
-export PATH="$PATH:$(npm bin -g)"
+export PATH="$(npm config get prefix)/bin:$PATH"
 ```
 
 ---
@@ -298,7 +297,7 @@ grep GEMINI_API_KEY ~/.zshrc
 完成所有步驟後，請確認以下項目：
 
 - [ ] `brew --version` 有顯示版本號
-- [ ] `node --version` 顯示 v18 以上
+- [ ] `node --version` 顯示 v20 以上
 - [ ] `gemini --version` 有顯示版本號
 - [ ] `echo $GEMINI_API_KEY` 有顯示 API Key
 - [ ] 啟動 `gemini` 後能正常對話

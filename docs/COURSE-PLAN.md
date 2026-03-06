@@ -74,14 +74,14 @@
    ```bash
    node --version
    ```
-   - 需要 v18 以上；若未安裝，執行 `brew install node`
+   - 需要 v20 以上；若未安裝，執行 `brew install node`
 
 3. 安裝 Gemini CLI（10 分鐘）
    ```bash
-   npm install -g @google/gemini-cli@preview
+   npm install -g @google/gemini-cli
    ```
    - 逐一處理每個人的安裝問題
-   - 常見問題備案：權限不足時在指令前加 `sudo`
+   - 常見問題備案：權限不足時，先確認 Node.js 透過 Homebrew 安裝，再執行 `brew reinstall node`
 
 4. 取得並設定 API Key（15 分鐘）
    - 使用公司帳號登入 Google AI Studio 取得 API Key
@@ -105,7 +105,7 @@
 
 **目標**：學員能下載、安裝並成功觸發一個 Skill
 
-**使用的 Skill**：`auto-journal`（記錄日常工作進度）
+**使用的 Skill**：`daily-log-coach`（記錄日常工作進度）
 
 理由：對行政人員最直接有感，觸發詞語自然（「記錄目標」「完成了」「我有個想法」）
 
@@ -121,7 +121,7 @@
 3. **安裝 Skill 到正確位置**（15 分鐘）
    ```bash
    mkdir -p ~/.gemini/skills
-   cp -r /path/to/auto-journal ~/.gemini/skills/
+   cp -r /path/to/daily-log-coach ~/.gemini/skills/
    ```
    - 帶著每個人確認目錄結構正確（管理員提供正確來源路徑）
 
@@ -189,7 +189,7 @@
 
 - Stage 1 最重要，動機不夠強的話，後面的操作會很痛苦
 - Stage 2 預留緩衝時間，每個人的環境不同，安裝問題會佔掉很多時間
-- Stage 3 結束後讓學員帶著「作業」離開：這週每天用一次 auto-journal
+- Stage 3 結束後讓學員帶著「作業」離開：這週每天用一次 daily-log-coach
 - 不要在課程中介紹太多 Skill，一次只學一個，學好再說
 
 ---
