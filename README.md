@@ -5,7 +5,7 @@
 透過攔截你日常的隨機想法、進度更新與目標設定，它能幫你結構化地歸檔記錄，並在你累積足夠的行為軌跡後，主動提供「教練式回饋」，幫助你發現盲點並推進目標。
 
 > **適用對象**：使用 Gemini CLI、Claude Code 或 Codex 的同仁。
-> **目前狀態**：Gemini / Claude / Codex 皆提供對應版本，發佈檔統一為 zip 格式。
+> **目前狀態**：三個 target 皆提供對應版本，預設 target 為 Claude，發佈檔統一為 zip 格式。
 
 ## 🌟 核心功能
 
@@ -31,8 +31,8 @@
 
 ## 🚀 安裝指南
 
-如果你還沒安裝 Gemini CLI，請先參考：
-- [Gemini CLI 安裝手冊（MacOS）](./docs/INSTALL.md)
+如果你還沒熟悉安裝流程，請先參考：
+- [Daily Log Coach 安裝手冊](./docs/INSTALL.md)
 
 ### 選項 A：對話式安裝（提供 GitHub URL 給 Agent）
 如果你不熟悉 terminal 指令，可以直接把 GitHub URL 丟給 Agent，請它代為安裝到目前 workspace（local scope）。
@@ -46,6 +46,17 @@ https://github.com/slee124565/daily-log-coach.git
 可直接貼給 Agent 的對話範本：
 
 ```text
+# 給 Claude Code
+請幫我用這個 repo 安裝 Daily Log Coach 到目前 workspace：
+https://github.com/slee124565/daily-log-coach.git
+請執行：
+1) git clone（若資料夾已存在可跳過）
+2) cd daily-log-coach
+3) ./install.sh local
+4) 回報安裝結果與實際安裝路徑
+```
+
+```text
 # 給 Codex
 請幫我用這個 repo 安裝 Daily Log Coach 到目前 workspace：
 https://github.com/slee124565/daily-log-coach.git
@@ -53,17 +64,6 @@ https://github.com/slee124565/daily-log-coach.git
 1) git clone（若資料夾已存在可跳過）
 2) cd daily-log-coach
 3) ./install.sh codex local
-4) 回報安裝結果與實際安裝路徑
-```
-
-```text
-# 給 Claude Code
-請幫我用這個 repo 安裝 Daily Log Coach 到目前 workspace：
-https://github.com/slee124565/daily-log-coach.git
-請執行：
-1) git clone（若資料夾已存在可跳過）
-2) cd daily-log-coach
-3) ./install.sh claude local
 4) 回報安裝結果與實際安裝路徑
 ```
 
@@ -79,27 +79,27 @@ https://github.com/slee124565/daily-log-coach.git
 ```
 
 安裝完成後請重新載入 Agent：
-*   **Gemini CLI**：執行 `/skills reload`。
 *   **Claude Code**：執行 `/clear` 或重啟 Claude Code。
 *   **Codex**：重啟 Codex session。
+*   **Gemini CLI**：執行 `/skills reload`。
 
 ### 選項 B：從 Releases 安裝（zip）
 到 [Releases](https://github.com/slee124565/daily-log-coach/releases) 下載對應檔案：
-- Gemini：`daily-log-coach-gemini-vX.Y.Z.zip`
 - Claude：`daily-log-coach-claude-vX.Y.Z.zip`
 - Codex：`daily-log-coach-codex-vX.Y.Z.zip`
+- Gemini：`daily-log-coach-gemini-vX.Y.Z.zip`
 
 下載後解壓縮到對應目錄（user scope）：
 
 ```bash
-# Gemini
-unzip daily-log-coach-gemini-vX.Y.Z.zip -d ~/.gemini/skills/daily-log-coach
-
 # Claude
 unzip daily-log-coach-claude-vX.Y.Z.zip -d ~/.claude/skills/daily-log-coach
 
 # Codex
 unzip daily-log-coach-codex-vX.Y.Z.zip -d ~/.codex/skills/daily-log-coach
+
+# Gemini
+unzip daily-log-coach-gemini-vX.Y.Z.zip -d ~/.gemini/skills/daily-log-coach
 ```
 
 ### 選項 C：開發者安裝 (Gemini / Claude / Codex)
@@ -109,39 +109,38 @@ unzip daily-log-coach-codex-vX.Y.Z.zip -d ~/.codex/skills/daily-log-coach
 git clone https://github.com/slee124565/daily-log-coach.git
 cd daily-log-coach
 
-# 安裝到「目前工作目錄」的本地 agent workspace（預設 local scope）
-./install.sh gemini
-./install.sh claude
+# 安裝到「目前工作目錄」的本地 agent workspace（預設 target = claude）
+./install.sh
 ./install.sh codex
+./install.sh gemini
 
 # 若要安裝到使用者目錄（user scope）
-./install.sh gemini user
-./install.sh claude user
+./install.sh user
 ./install.sh codex user
+./install.sh gemini user
 ```
 
 **安裝後操作：**
-*   **Gemini CLI**：執行 `/skills reload` 重新載入。
 *   **Claude Code**：執行 `/clear` 或重啟 Claude Code 重新載入。
 *   **Codex**：重啟 Codex session 重新載入。
+*   **Gemini CLI**：執行 `/skills reload` 重新載入。
 
-> `install.sh` 參數格式：`./install.sh [gemini|claude|codex] [local|user]`（預設為 `local`）。
+> `install.sh` 參數格式：`./install.sh [gemini|claude|codex] [local|user]`（預設 target 為 `claude`，scope 預設為 `local`）。
 
 ### 模型版本結構
 
 ```text
 skill/
+  claude/
+    SKILL.md
+  codex/
+    SKILL.md
   gemini/
     SKILL.md
     references/
-  claude/
-    SKILL.md
-    references/
-  codex/
-    SKILL.md
 ```
 
-可使用 `./release.sh gemini`、`./release.sh claude` 或 `./release.sh codex` 產生對應發佈檔。
+可使用 `./release.sh`（預設 Claude）、`./release.sh gemini` 或 `./release.sh codex` 產生對應發佈檔。
 
 ---
 

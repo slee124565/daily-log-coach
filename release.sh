@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Daily Log Coach Skill Release Script
-# 用法: ./release.sh [gemini|claude|codex]
+# 用法: ./release.sh [gemini|claude|codex]（預設 target: claude）
 # 此腳本會依據 skill/<model>/SKILL.md metadata.version 屬性封裝發佈檔（統一輸出 zip）
 
-TARGET=${1:-gemini}
+TARGET=${1:-claude}
 SKILL_NAME="daily-log-coach"
 SOURCE_DIR="./skill/$TARGET"
 
 if [ "$TARGET" != "gemini" ] && [ "$TARGET" != "claude" ] && [ "$TARGET" != "codex" ]; then
     echo "❌ 錯誤：不支援的 target '$TARGET'"
-    echo "用法：./release.sh [gemini|claude|codex]"
+    echo "用法：./release.sh [gemini|claude|codex]（預設 target: claude）"
     exit 1
 fi
 

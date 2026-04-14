@@ -2,10 +2,10 @@
 
 # Daily Log Coach Skill Installation Script
 # Usage: ./install.sh [target] [scope]
-# Example: ./install.sh gemini local (Defaults: gemini local)
+# Example: ./install.sh claude local (Defaults: claude local)
 
 # Set variables
-TARGET=${1:-gemini}  # Default to gemini
+TARGET=${1:-claude}  # Default to claude
 SCOPE=${2:-local}    # Default to local workspace
 SKILL_NAME="daily-log-coach"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,7 +20,7 @@ elif [ "$TARGET" == "codex" ]; then
     TARGET_BASE=".codex"
 else
     echo "❌ Error: Unsupported target environment '$TARGET'"
-    echo "Usage: ./install.sh [gemini|claude|codex] [local|user]"
+    echo "Usage: ./install.sh [gemini|claude|codex] [local|user] (default target: claude, default scope: local)"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ elif [ "$SCOPE" == "user" ]; then
     DEST_DIR="$HOME/$TARGET_BASE/skills/$SKILL_NAME"
 else
     echo "❌ Error: Unsupported scope '$SCOPE'"
-    echo "Usage: ./install.sh [gemini|claude|codex] [local|user]"
+    echo "Usage: ./install.sh [gemini|claude|codex] [local|user] (default target: claude, default scope: local)"
     exit 1
 fi
 
